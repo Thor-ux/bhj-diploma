@@ -1,28 +1,38 @@
-/**
- * Класс UserWidget отвечает за
- * отображение информации о имени пользователя
- * после авторизации или его выхода из системы
- * */
-
 class UserWidget {
   /**
-   * Устанавливает полученный элемент
-   * в свойство element.
-   * Если переданный элемент не существует,
-   * необходимо выкинуть ошибку.
-   * */
-  constructor(element){
-
+   * Create UserWidget
+   * @param {HTMLElement} element
+   */
+  constructor(element) {
+      if (!element) {
+          throw new Error('Element is not provided');
+      }
+      this.element = element;
   }
 
   /**
-   * Получает информацию о текущем пользователе
-   * с помощью User.current()
-   * Если пользователь авторизован,
-   * в элемент .user-name устанавливает имя
-   * авторизованного пользователя
-   * */
-  update(){
-
+  update
+   */
+  update() {
+      const currentUser = User.current();
+      const userNameElement = this.element.querySelector('.user-name');
+      
+      if (currentUser) {
+          if (userNameElement) {
+              userNameElement.textContent = currentUser.name;
+          }
+          this.element.classList.remove('hide');
+      } else {
+          if (userNameElement) {
+              userNameElement.textContent = '';
+          }
+          this.element.classList.add('hide');
+      }
   }
 }
+
+// Creation usage
+const userWidgetElement = document.querySelector('.user-widget');
+const userWidget = new UserWidget(userWidgetElement);
+
+userWidget.update();

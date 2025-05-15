@@ -1,49 +1,51 @@
-/**
- * Класс AsyncForm управляет всеми формами
- * приложения, которые не должны быть отправлены с
- * перезагрузкой страницы. Вместо этого данные
- * с таких форм собираются и передаются в метод onSubmit
- * для последующей обработки
- * */
 class AsyncForm {
   /**
-   * Если переданный элемент не существует,
-   * необходимо выкинуть ошибку.
-   * Сохраняет переданный элемент и регистрирует события
-   * через registerEvents()
-   * */
+   * @param {HTMLFormElement} element
+   */
   constructor(element) {
-
+      if (!element || !(element instanceof HTMLFormElement)) {
+          throw new Error('Invalid form element provided');
+      }
+      this.element = element;
+      this.registerEvents();
   }
 
   /**
-   * Необходимо запретить отправку формы и в момент отправки
-   * вызывает метод submit()
-   * */
+   * Registers the form
+   */
   registerEvents() {
-
+      this.element.addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.submit();
+      });
   }
 
   /**
-   * Преобразует данные формы в объект вида
-   * {
-   *  'название поля формы 1': 'значение поля формы 1',
-   *  'название поля формы 2': 'значение поля формы 2'
-   * }
-   * */
+   *
+   * @returns {Object} 
+   */
   getData() {
-
-  }
-
-  onSubmit(options){
-
+      const formData = new FormData(this.element);
+      const id = {};
+      for (let [key, value] of formData.entries()) {
+          data[key] = value;
+      }
+      return data;
   }
 
   /**
-   * Вызывает метод onSubmit и передаёт туда
-   * данные, полученные из метода getData()
-   * */
-  submit() {
+   * 
+   * @param {Object} data 
+   */
+  onSubmit(data) {
+      
+  }
 
+  /**
+   * Submit
+   */
+  submit() {
+      const id = this.getData();
+      this.onSubmit(id);
   }
 }

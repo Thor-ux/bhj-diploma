@@ -1,31 +1,66 @@
-/**
- * Класс Entity - базовый для взаимодействия с сервером.
- * Имеет свойство URL, равно пустой строке.
- * */
 class Entity {
   /**
-   * Запрашивает с сервера список данных.
-   * Это могут быть счета или доходы/расходы
-   * (в зависимости от того, что наследуется от Entity)
-   * */
-  static list(data, callback){
+    URL for the entity's API
+   * @type {string}
+   */
+  static url = 'http://localhost:8000/';
 
+  /**
+   * List of entities
+   * @param {Object} [data={}]
+   * @param {Function} callback
+   */
+  static list(data = {}, callback) {
+      createRequest({
+          url: this.url,
+          method: 'GET',
+          data: data,
+          callback: (err, response) => {
+              if (err) {
+                  callback(err, null);
+              } else {
+                  callback(null, response);
+              }
+          }
+      });
   }
 
   /**
-   * Создаёт счёт или доход/расход с помощью запроса
-   * на сервер. (в зависимости от того,
-   * что наследуется от Entity)
-   * */
+   * Removes an entity
+   * @param {string|number} id
+   * @param {Function} callback 
+   **/
+  static remove(id, callback) {
+      createRequest({
+          url: `${this.url}/${id}`,
+          method: 'DELETE',
+          callback: (err, response) => {
+              if (err) {
+                  callback(err, null);
+              } else {
+                  callback(null, response);
+              }
+          }
+      });
+  }
+
+  /**
+   * New entity on the server
+   * @param {Object} data
+   * @param {Function} callback
+   */
   static create(data, callback) {
-
-  }
-
-  /**
-   * Удаляет информацию о счёте или доходе/расходе
-   * (в зависимости от того, что наследуется от Entity)
-   * */
-  static remove(data, callback ) {
-
+      createRequest({
+          url: this.url,
+          method: 'POST',
+          data: data,
+          callback: (err, response) => {
+              if (err) {
+                  callback(err, null);
+              } else {
+                  callback(null, response);
+              }
+          }
+      });
   }
 }
